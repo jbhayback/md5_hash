@@ -57,7 +57,7 @@ MD5Hash::MD5Hash(const std::string& file_path)
  
 void MD5Hash::initialize()
 {
-  is_ok_ = false;
+  is_message_digest_ok_ = false;
   counters_[0] = 0;
   counters_[1] = 0;
   states_[0] = 0x653453fe;
@@ -73,7 +73,6 @@ void MD5Hash::decode(unsigned int output[], const unsigned char input[], unsigne
     output[i] = ((unsigned int)input[j]) | (((unsigned int)input[j+1]) << 8) |
       (((unsigned int)input[j+2]) << 16) | (((unsigned int)input[j+3]) << 24);
 }
- 
  
 // encodes input into output.
 void MD5Hash::encode(unsigned char output[], const unsigned int input[], unsigned int len)
@@ -179,7 +178,7 @@ void MD5Hash::transform(const unsigned char block[block_size])
   memset(X, 0, sizeof(X));
 }
  
-// MD5Hash processing operation.
+// MD5Hash processing blocks.
 void MD5Hash::process(const unsigned char input[], unsigned int length)
 {
   // compute number of bytes of input
@@ -202,7 +201,10 @@ void MD5Hash::process(const unsigned char input[], unsigned int length)
  
     // transform chunks of block_size (64 bytes)
     for (i = part_one; i + block_size <= length; i += block_size)
+    {
+      // The contents of the four buffers (A, B, C and D) are now mixed with the words of the input, using the four auxiliary functions (F, G, H and I)
       transform(&input[i]);
+    }
  
     index = 0;
   }
@@ -210,8 +212,7 @@ void MD5Hash::process(const unsigned char input[], unsigned int length)
   {
     i = 0;
   }
-    
- 
+
   // buff remaining input
   memcpy(&buff_[index], &input[i], length-i);
 }
@@ -226,7 +227,8 @@ void MD5Hash::process(const char input[], unsigned int length)
 // the message digest_ and zeroizing the context.
 MD5Hash& MD5Hash::finalize()
 {
-  if (!is_ok_) {
+  if (!is_message_digest_ok_)
+  {
     // Save number of bits
     unsigned char bits[8];
     encode(bits, counters_, 8);
@@ -246,7 +248,7 @@ MD5Hash& MD5Hash::finalize()
     memset(buff_, 0, sizeof(buff_));
     memset(counters_, 0, sizeof(counters_));
  
-    is_ok_=true;
+    is_message_digest_ok_ = true;
   }
  
   return *this;
@@ -276,7 +278,7 @@ std::string MD5Hash::getCardNumData(const std::string& file_path) const
 // return hex representation of digest as string
 std::string MD5Hash::getMessageDigest() const
 {
-  if (!is_ok_)
+  if (!is_message_digest_ok_)
     return "";
  
   char buf[33];

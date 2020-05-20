@@ -20,11 +20,11 @@ private:
   MD5Hash& finalize();
   std::string getMessageDigest() const;
  
-  bool is_ok_;
   unsigned int counters_[2];
   unsigned int states_[4];
   unsigned char buff_[block_size];
   unsigned char digest_[16];
+  bool is_message_digest_ok_;
 
 public:
   MD5Hash() = default;
