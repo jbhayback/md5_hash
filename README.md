@@ -13,3 +13,5 @@ When ouputting the md5 hashed card number, call the public meber function output
 To test the ouput, compile and run the Test.cpp
     1. g++ -o output Test.cpp md5_hash.cpp
     2. Run output.exe
+    3. Check within the directory the newly created file having a name of already hashed card number.
+    4. Alternatively, you can also open the file using a text editor to see the md5 hashed card number.
