@@ -7,7 +7,7 @@ When instantiating the class, pass the file path of the text file as an argument
 
 # Output
 Generate a file of the hashed card number.
-When ouputting the md5 hashed card number, call the public meber function outputMD5HashedCardNum().
+When ouputting the md5 hashed card number, call the public member function outputMD5HashedCardNum().
 
 # Testing
 To test the ouput, compile and run the Test.cpp
